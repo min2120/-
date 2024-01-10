@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="app.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" />
+    <!-- 외부서비스에서 아이콘 불러올 때는 <i> 태그 사용
+              https://fontawesome.com/start  
+              https://icons.getbootstrap.kr/ -->
+
+
+</head>
+
+<body>
+
+    <div class="wrap">
+
+        <div class="header">
+            <div class="img">
+                <img src="https://images.unsplash.com/photo-1599930113854-d6d7fd521f10?q=80&w=2556&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    alt="">
+            </div>
+
+            <a class="title"> Ping Pong Score Keeper</a>
+        </div>
+        <div class="main">
+            <div class="line"></div>
+            <div class="score"> <span id="스팬1">0</span> to <span id="스팬2">0</span> </div>
+            <p>Use the buttons below to keep score.</p>
+
+            <div class="scoreChoice">
+                Playing To
+                <div class="dropdown">
+                    <select id="winValue">
+                        <option value="3">3</option>
+                        <option value="5">5</option>
+                        <option value="7">7</option>
+                        <option value="9">9</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="btn">
+                <button id="player1">+1 Player One</button>
+                <button id="player2">+1 Player Two</button>
+                <button id="resetBtn">Reset</button>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+    <script src="app.js"></script>
+</body>
+
+</html>
