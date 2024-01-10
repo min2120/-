@@ -1,114 +1,73 @@
+// code리팩토링 1차  
 
 
-// 일정점수 도달하면 2 to 5에 색변환 효과. 
-// 숫자 밑 문구 Use the buttons below to keep score. 
-// 로 변경 점수올리는 버튼 비활성화(색변함)
+const p1 = {
+    score: 0,
+    button: document.querySelector('#player1'),
+    display: document.querySelector('#스팬1')
+};
 
+const p2 = {
+    score: 0,
+    button: document.querySelector('#player2'),
+    display: document.querySelector('#스팬2')
+};
 
-// const span1, span2;
-// const span1 = document.querySelector('#span1');
-// const span2 = document.querySelector('#span2');
-
-const player1 = document.querySelector('#player1')
-const player2 = document.querySelector('#player2')
-
-const 스팬1 = document.querySelector('#스팬1')
-const 스팬2 = document.querySelector('#스팬2')
-
-
-let p1Score = 0;
-let p2Score = 0;
-
-
-const winScoreSelect = document.querySelector('#winValue')
-
+const winScoreSelect = document.querySelector('#winValue');
 let WScore = parseInt(winScoreSelect.value);
 
 winScoreSelect.addEventListener('change', function () {
-
     //this.value !!
     WScore = parseInt(this.value);
     resetfuc();
-})
-
-
-
-// document.querySelectorAll('option')[].value;
-
-
-
+});
 
 let isGameOver = false;
 
-player1.addEventListener('click', function () {
+function updateScores(player, opponent) {
     if (!isGameOver) {
-        p1Score += 1
-        if (p1Score === WScore) {
+        player.score += 1
+        if (player.score === WScore) {
             isGameOver = true;
 
-            스팬1.classList.add('winner');
-            스팬2.classList.add('loser');
-            player1.classList.add('un');
-            player2.classList.add('un');
+            player.display.classList.add('winner');
+            opponent.display.classList.add('loser');
+            player.button.classList.add('un');
+            opponent.button.classList.add('un');
         }
-        스팬1.textContent = p1Score;
+        player.display.textContent = player.score;
     }
-})
+};
 
-player2.addEventListener('click', function () {
-    if (!isGameOver) {
-        p2Score += 1
-        if (p2Score === WScore) {
-            isGameOver = true;
+p1.button.addEventListener('click', function () {
+    updateScores(p1, p2)
+});
 
-            스팬2.classList.add('winner');
-            스팬1.classList.add('loser');
-            player1.classList.add('un');
-            player2.classList.add('un');
+p2.button.addEventListener('click', function () {
+    updateScores(p2, p1)
+});
 
-        }
-        스팬2.textContent = p2Score;
-    }
-})
-
-
-const resetBtn = document.querySelector('#resetBtn')
-
-resetBtn.addEventListener('click', resetfuc)
+const resetBtn = document.querySelector('#resetBtn');
+resetBtn.addEventListener('click', resetfuc);
 
 function resetfuc() {
     isGameOver = false;
-    p1Score = 0;
-    p2Score = 0;
-    스팬1.textContent = 0;
-    스팬2.textContent = 0;
 
-    스팬2.classList.remove('winner', 'loser');
-    스팬1.classList.remove('winner', 'loser');
-}
+    for (let p of [p1, p2]) {
+        p.score = 0;
+        p.display.textContent = 0;
+        p.display.classList.remove('winner', 'loser');
+        p.button.classList.remove('un');
+    };
 
-// function() {
-//     return span += 1;
-// };
+    // p1.score = 0;
+    // p2.score = 0;
+    // p1.display.textContent = 0;
+    // p2.display.textContent = 0;
 
-// const 버튼 = function (버튼) {
-//     this.addEventListener('click', function () {
+    // p1.display.classList.remove('winner', 'loser');
+    // p2.display.classList.remove('winner', 'loser');
 
-//     });
-
-//     if (점수 달성하면) {
-//     버튼 1, 2 색 바뀌고 비활성화;
-//     }
-// }
-
-// const 리셋버튼 = document.querySelector('#resetBtn');
-// 리셋버튼.addEventListener('click', function(){
-//     span1,2 0으로 초기화되고
-//     버튼 1, 2 색 바뀌고 활성화;
-
-// })
-
-// const btn1 = document.querySelector('#player1');
-// btn1.addEventListener('click', function () {
-//     console.log('hi');
-// })
+    // p1.button.classList.remove('un');
+    // p2.button.classList.remove('un');
+};
