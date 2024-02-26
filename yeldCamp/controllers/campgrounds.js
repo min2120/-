@@ -75,6 +75,12 @@ module.exports.updateCampground = async (req, res, next) => {
     { ...req.body.campground },
     { new: true }
   ); // { new: true } -업데이트된 데이터를 받겠다. 지금은 굳이 필요없음
+  const imgs = req.files.map((f) => ({
+    url: f.path,
+    filename: f.filename,
+  }));
+  campground.images.push(...imgs); // 이렇게 전달해야 배열에서 데이터를 각각 인수로 가져와서 push해줌.
+  await campground.save();
   req.flash("success", "Successfully updated campground!");
   res.redirect(`/campgrounds/${campground._id}`);
 };
