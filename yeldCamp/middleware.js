@@ -16,7 +16,6 @@ module.exports.isLoggedIn = (req, res, next) => {
 };
 
 // middleware.js 파일에서, 세션(req.session.returnTo)의 returnTo 값을 res.locals에 저장하기 위해 storeReturnTo라는 새로운 미들웨어 함수를 만드는 코드를 추가합니다.
-
 module.exports.storeReturnTo = (req, res, next) => {
   if (req.session.returnTo) {
     res.locals.returnTo = req.session.returnTo;

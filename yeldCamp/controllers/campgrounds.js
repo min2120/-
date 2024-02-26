@@ -1,3 +1,4 @@
+const { response } = require("express");
 const Campground = require("../models/campground");
 
 module.exports.index = async (req, res, next) => {
@@ -15,8 +16,13 @@ module.exports.createCampground = async (req, res, next) => {
 
   // 몽구스로 저장하기도 전에 데이터 유효성검사가 들어감
   const campground = new Campground(req.body.campground);
+  campground.images = req.files.map((f) => ({
+    url: f.path,
+    filename: f.filename,
+  })); // 암시적반환
   campground.author = req.user._id;
   await campground.save();
+  console.log(campground);
   req.flash("success", "Successfully made a new campground!");
   // show페이지의 get라우터안에서 render할때 이걸 전달해줘야 페이지 내에서 사용 가능하겠져?
   // 그렇지만.. 하나하나 다 입력하려면 너무 번거롭기 때문에 모든 요청에서 모든 정보를 받는 미들웨어를 설정해서 플래시를 전달해줄것임.(템플릿으로 전달해줘서 로컬변수로서 접근가능하도록)

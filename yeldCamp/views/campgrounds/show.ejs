@@ -4,7 +4,9 @@
 <div class="row">
   <div class="col-6">
     <div class="card mb-5">
-      <img src="<%= campground.image %>" class="card-img-top" alt="..." />
+      <% for(let img of campground.images) { %>
+      <img src="<%= img.url %>" class="card-img-top" alt="..." />
+      <% } %>
       <div class="card-body">
         <h5 class="card-title"><%= campground.title %></h5>
         <p class="card-text"><%= campground.description %></p>
@@ -71,10 +73,12 @@
             id="no-rate"
             class="input-no-rate"
             name="review[rating]"
-            value="0"
+            value="1"
             checked
             aria-label="No rating."
           />
+          <!--+ 별점에는 따로 유효성검사를 하지 않음 -> 넣기 까다로움, 값에 1 넣어서 별점을 안주면 1이 입력되도록했음 
+                (유효성검사 넣는법.. js에서 별점이 없는경우가 정의되지 않고 별을 선택하지 않으면 폼을 제출하지 않도록 설정, 체크박스나 라디오 버튼을 선택했는지 확인하려면 문서객체모델을 조작해야함 . 이렇게 작업하지 않을거면 폼을제출하도록 허용하지 말기)-->
           <input
             type="radio"
             id="first-rate1"

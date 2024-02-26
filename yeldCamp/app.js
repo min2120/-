@@ -1,4 +1,12 @@
 // + 라우트도 보호해줘야함 postman이나 ajax를 사용해서 접근하지 못하도록
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+
+//process.env.NODE_ENV : 환경변수로, 개발 혹은 프로덕션 환경을 표시
+//require('dotenv')는 env에 정의한 변수를 가져와서 노드앱의 process.env에 변수를 추가해줌으로써 파일안의 변수에 접근할 수 있게 해줌
+// 그런데 프로덕션환경에서는 환경변수를 설정하는방식이 다름(파일에 변수를 저장하지 않고 프로덕션환경에 저장함)
+// env파일 띄어쓰기, '' x
 
 const express = require("express");
 const path = require("path");
