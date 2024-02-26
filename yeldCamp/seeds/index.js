@@ -27,7 +27,12 @@ const seedDB = async () => {
       // 그리고 데이터베이스 재실행  $ node seeds/index.js
       location: `${cities[random1000].city}, ${cities[random1000].state}`,
       title: `${sample(descriptors)} ${sample(places)}`,
-      image: "https://source.unsplash.com/collection/483251",
+      images: [
+        {
+          url: "https://res.cloudinary.com/dd1x5mwes/image/upload/v1708928607/YelpCamp/tzqie14bgn3pntlirczv.jpg",
+          filename: "YelpCamp/tzqie14bgn3pntlirczv",
+        },
+      ],
       description:
         "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis, hic! Cum sequi quis nisi amet sapiente maiores, beatae expedita repellendus, veritatis deserunt unde consequuntur nihil quasi? Doloremque recusandae reiciendis deleniti.",
       price,
