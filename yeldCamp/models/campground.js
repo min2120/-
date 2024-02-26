@@ -2,9 +2,20 @@ const mongoose = require("mongoose");
 const Review = require("./review");
 const Schema = mongoose.Schema;
 
+// 몽고에서 몽구스를 이용한 가상특성 설정으로 이미지를 썸네일크기로 조정
+const ImageSchema = new Schema({
+  url: String,
+  filename: String,
+});
+
+ImageSchema.virtual("thumbnail").get(function () {
+  return this.url.replace("/upload", "/upload/w_200");
+  // todo 이거 정규표현식으로도 작성해보기
+}); // 이렇게 가상특성을 통해서 설정하면, 스키마에 저장되는게 아니라 호출될때마다 실행된 결과값이 나오게됨
+
 const CampgroundSchema = new Schema({
   title: String,
-  images: [{ url: String, filename: String }],
+  images: [ImageSchema],
   price: Number,
   description: String,
   location: String,

@@ -1,5 +1,5 @@
-const { response } = require("express");
 const Campground = require("../models/campground");
+const { cloudinary } = require("../cloudinary");
 
 module.exports.index = async (req, res, next) => {
   const campgrounds = await Campground.find({});
@@ -68,7 +68,7 @@ module.exports.renderEditForm = async (req, res, next) => {
 module.exports.updateCampground = async (req, res, next) => {
   // res.send("IT WORKED!");
   const { id } = req.params;
-
+  console.log(req.body);
   // const campground = await Campground.findByIdAndUpdate(id,{...req.body.campground,},{ new: true }); // { new: true } -업데이트된 데이터를 받겠다. 지금은 굳이 필요없음
   const campground = await Campground.findByIdAndUpdate(
     id,
@@ -81,6 +81,15 @@ module.exports.updateCampground = async (req, res, next) => {
   }));
   campground.images.push(...imgs); // 이렇게 전달해야 배열에서 데이터를 각각 인수로 가져와서 push해줌.
   await campground.save();
+  if (deleteImages) {
+    for (let filename of req.body.deleteImages) {
+      await cloudinary.uploader.destroy(filename);
+    }
+    await campground.updateOne({
+      $pull: { images: { filename: { $in: req.body.deleteImages } } },
+    });
+    console.log(campground);
+  }
   req.flash("success", "Successfully updated campground!");
   res.redirect(`/campgrounds/${campground._id}`);
 };
