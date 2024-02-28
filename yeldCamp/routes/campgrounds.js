@@ -21,7 +21,7 @@ const Campground = require("../models/campground");
 router.route("/").get(catchAsync(campgrounds.index)).post(
   isLoggedIn,
   upload.array("campground[image]"),
-  validateCampground,
+  // validateCampground,
   //! 실제프로덕션상황에서는 유효성 검사 후에 이미지를 업로드 해야하지만
   //! multer 미들웨어 특성상 (멀터는 파싱하는 동안 우선 모두 업로드하고 그 다음 req.body에 접근하는 모든것을 전송함 )
   catchAsync(campgrounds.createCampground)
@@ -42,7 +42,7 @@ router
     isLoggedIn,
     isAuthor,
     upload.array("campground[image]"),
-    validateCampground,
+    // validateCampground,
     catchAsync(campgrounds.updateCampground)
   )
   .delete(
