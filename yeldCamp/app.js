@@ -2,6 +2,8 @@
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
+require("dotenv").config();
+// 배포환경에서 실행하는법 NODE_ENV=production node app.js 터미널에 입력
 
 //process.env.NODE_ENV : 환경변수로, 개발 혹은 프로덕션 환경을 표시
 //require('dotenv')는 env에 정의한 변수를 가져와서 노드앱의 process.env에 변수를 추가해줌으로써 파일안의 변수에 접근할 수 있게 해줌
@@ -20,6 +22,9 @@ const methodOverride = require("method-override"); //
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
+const helmet = require("helmet");
+
+const mongoSanitize = require("express-mongo-sanitize");
 
 const userRouters = require("./routes/users");
 const campgroundRouters = require("./routes/campgrounds");
@@ -46,14 +51,21 @@ app.use(methodOverride("_method"));
 // app.use(express.static("public")); //// 클라이언트가 "/파일명" 경로로 요청할 때 앱의 루트 디렉토리의 "public" 폴더에 있는 파일을 제공.
 app.use(express.static(path.join(__dirname, "public")));
 // (절대경로)클라이언트가 "/파일명" 경로로 요청할 때 앱이 위치한 디렉토리와 "public" 폴더를 결합해(현재 스크립트가 위치한 디렉토리를 기준으로) 파일을 제공.
+app.use(
+  mongoSanitize({
+    replaceWith: "_",
+  })
+);
 
 const sessionConfig = {
+  name: "yelp-camp",
   secret: "프로덕션단계에서실제비밀키로변경예정", //todo 프로덕션 단계에서 실제 비밀키로 변경
   resave: false,
   saveUninitialized: true,
   // todo store: 현재는 개발목적으로쓰는메모리저장소 후에 Mongo 저장소로 변경예정
   cookie: {
     httpOnly: true, // 기본적인 보안옵션, 쿠키에 HttpOnly 플래그가 뜨면 클라이언트 측 스크립트에서 해당 쿠키에 접근이 불가능하고 XSS에 결함이 있거나 사용자가 결함을 일으키는 링크에 접근하면 브라우저가 제 3자에게 쿠키를 유출하지 않도록함
+    // secure: true, // 쿠키가 보안상태인 http를 통해서만 작동하도록함 (로컬호스트는 x 배포시 필요)
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
     maxAge: 1000 * 60 * 60 * 24 * 7,
   },
@@ -62,6 +74,54 @@ app.use(session(sessionConfig));
 // 크롬 검사 애플리케이션 - 쿠키에 connect.sid로 세션ID가 뜨는 것 확인 가능
 app.use(flash());
 // req.flash에 키-값 쌍을 전달해 플래시를 생성함
+// app.use(helmet({ contentSecurityPolicy: false }));
+app.use(helmet());
+// 아래 옵션들 살짝씩 수정해서 다른 앱에 사용하기
+const scriptSrcUrls = [
+  "https://stackpath.bootstrapcdn.com",
+  "https://api.tiles.mapbox.com",
+  "https://api.mapbox.com",
+  "https://kit.fontawesome.com",
+  "https://code.jquery.com",
+  "https://cdnjs.cloudflare.com",
+  "https://cdn.jsdelivr.net",
+];
+const styleSrcUrls = [
+  "https://kit-free.fontawesome.com",
+  "https://stackpath.bootstrapcdn.com",
+  "https://cdn.jsdelivr.net",
+  "https://api.mapbox.com",
+  "https://api.tiles.mapbox.com",
+  "https://fonts.googleapis.com",
+  "https://use.fontawesome.com",
+];
+const connectSrcUrls = [
+  "https://api.mapbox.com",
+  "https://*.tiles.mapbox.com",
+  "https://events.mapbox.com",
+];
+const fontSrcUrls = [];
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: [],
+      connectSrc: ["'self'", ...connectSrcUrls],
+      scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+      styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+      workerSrc: ["'self'", "blob:"],
+      childSrc: ["blob:"],
+      objectSrc: [],
+      imgSrc: [
+        "'self'",
+        "blob:",
+        "data:",
+        "https://res.cloudinary.com/dd1x5mwes/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT!  //+ dd1x5mwes
+        "https://images.unsplash.com",
+      ],
+      fontSrc: ["'self'", ...fontSrcUrls],
+    },
+  })
+);
 
 app.use(passport.initialize());
 app.use(passport.session()); // 영구 로그인 세션을 위한 패스포트 미들웨어(기존 세션 아래에 작성해야함)
