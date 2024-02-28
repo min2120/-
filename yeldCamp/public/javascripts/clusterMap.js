@@ -7,6 +7,7 @@ const map = new mapboxgl.Map({
   zoom: 3,
 });
 
+console.log(campgrounds);
 map.addControl(new mapboxgl.NavigationControl());
 
 map.on("load", function () {
@@ -96,7 +97,7 @@ map.on("load", function () {
   // the location of the feature, with
   // description HTML from its properties.
   map.on("click", "unclustered-point", function (e) {
-    const { popUpMarkup } = e.features[0].properties;
+    const { popUpMarkup } = e.features[0].properties; // 몽구스에서 가상특성만들어서 전달
     const coordinates = e.features[0].geometry.coordinates.slice();
 
     // Ensure that if the map is zoomed out such that
