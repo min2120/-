@@ -1,8 +1,15 @@
+* {
+  font-family: "Pretendard Variable", Pretendard, -apple-system,
+    BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
+    "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+}
+
 body {
   height: 100vh;
-  font-size: 14px;
+  font-size: 16px;
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("https://images.unsplash.com/photo-1559521783-1d1599583485?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80");
+    url("https://res.cloudinary.com/dd1x5mwes/image/upload/v1709165158/YelpCamp/e%CC%82_e%CC%82_e%CC%82_e%CC%82_e%CC%82_%C2%AA_e%CC%82_e%CC%82_e%CC%82_e%CC%82_%C2%AAe%CC%82_99_e%CC%82_e%CC%82_e%CC%82_e%CC%82_e%CC%82_e%CC%82__22_q835oq.jpg");
   background-size: cover;
   background-position: center;
   box-shadow: inset 0 0 5rem rgba(0, 0, 0, 0.5);
@@ -13,7 +20,7 @@ body {
 
 .nav-link {
   padding: 0.25rem 0;
-  font-weight: 500;
+  font-weight: 400;
   color: rgba(255, 255, 255, 0.5);
   margin-left: 1rem;
   border-bottom: 0.25rem solid transparent;
@@ -31,9 +38,13 @@ body {
 
 .btn-secondary {
   color: #333;
+  font-weight: 600;
+  font-size: 16px;
   text-shadow: none;
+  border: none;
+  background: rgba(255, 255, 255, 0.5);
 }
 
 .btn-secondary:hover {
-  color: #a1a1a1;
+  background-color: rgba(255, 255, 255, 0.5);
 }

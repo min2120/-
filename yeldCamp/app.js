@@ -16,6 +16,7 @@ const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
 const session = require("express-session"); //플래시메세지를 만들고 인증을 위해 세션에 접근하기 위해서
 //todo [앱배포후 프로덕션 단계에서 진행] 보안을 위해 로컬메모리세션저장소 사용x
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const ExpressError = require("./utils/ExpressError");
 const methodOverride = require("method-override"); //
@@ -23,6 +24,9 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
 const helmet = require("helmet");
+// const dbUrl = process.env.DB_URL;
+//"mongodb://127.0.0.1:27017/yelp-camp"
+const dbUrl = "mongodb://127.0.0.1:27017/yelp-camp";
 
 const mongoSanitize = require("express-mongo-sanitize");
 
@@ -38,7 +42,7 @@ main().catch((err) => {
 });
 
 async function main() {
-  await mongoose.connect("mongodb://127.0.0.1:27017/yelp-camp");
+  await mongoose.connect(dbUrl);
   console.log("connected to database");
 }
 
@@ -57,7 +61,20 @@ app.use(
   })
 );
 
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  touchAfter: 24 * 60 * 60, // 데이터와 세션이 변경되지 않았을때 불필요한 재저장이나 업데이트에 관한 내용, 초단위
+  crypto: {
+    secret: "프로덕션단계에서실제비밀키로변경예정",
+  },
+});
+
+store.on("error", function (e) {
+  console.log("SESSION STORE ERROR: " + e.message);
+});
+
 const sessionConfig = {
+  store,
   name: "yelp-camp",
   secret: "프로덕션단계에서실제비밀키로변경예정", //todo 프로덕션 단계에서 실제 비밀키로 변경
   resave: false,
@@ -70,6 +87,7 @@ const sessionConfig = {
     maxAge: 1000 * 60 * 60 * 24 * 7,
   },
 };
+
 app.use(session(sessionConfig));
 // 크롬 검사 애플리케이션 - 쿠키에 connect.sid로 세션ID가 뜨는 것 확인 가능
 app.use(flash());
@@ -84,6 +102,8 @@ const scriptSrcUrls = [
   "https://kit.fontawesome.com",
   "https://code.jquery.com",
   "https://cdnjs.cloudflare.com",
+  "https://fonts.googleapis.com",
+  "https://fonts.gstatic.com",
   "https://cdn.jsdelivr.net",
 ];
 const styleSrcUrls = [
@@ -93,6 +113,7 @@ const styleSrcUrls = [
   "https://api.mapbox.com",
   "https://api.tiles.mapbox.com",
   "https://fonts.googleapis.com",
+  "https://fonts.gstatic.com",
   "https://use.fontawesome.com",
 ];
 const connectSrcUrls = [
@@ -100,7 +121,11 @@ const connectSrcUrls = [
   "https://*.tiles.mapbox.com",
   "https://events.mapbox.com",
 ];
-const fontSrcUrls = [];
+const fontSrcUrls = [
+  "https://fonts.googleapis.com",
+  "https://fonts.gstatic.com",
+  "https://cdn.jsdelivr.net",
+];
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
