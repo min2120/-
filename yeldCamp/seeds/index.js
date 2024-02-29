@@ -30,8 +30,12 @@ const seedDB = async () => {
       title: `${sample(descriptors)} ${sample(places)}`,
       images: [
         {
-          url: "https://res.cloudinary.com/dd1x5mwes/image/upload/v1708928607/YelpCamp/tzqie14bgn3pntlirczv.jpg",
-          filename: "YelpCamp/tzqie14bgn3pntlirczv",
+          url: "https://res.cloudinary.com/dd1x5mwes/image/upload/v1709165142/YelpCamp/e%CC%82_e%CC%82_e%CC%82_e%CC%82_e%CC%82_%C2%AA_e%CC%82_e%CC%82_e%CC%82_e%CC%82_%C2%AAe%CC%82_99_e%CC%82_e%CC%82_e%CC%82_e%CC%82_e%CC%82_e%CC%82__08_vyblg4.jpg",
+          filename: "YelpCamp/ê_ê_ê_ê_ê_ª_ê_ê_ê_ê_ªê_99_ê_ê_ê_ê_ê_ê__08_vyblg4",
+        },
+        {
+          url: "https://res.cloudinary.com/dd1x5mwes/image/upload/v1709165158/YelpCamp/e%CC%82_e%CC%82_e%CC%82_e%CC%82_e%CC%82_%C2%AA_e%CC%82_e%CC%82_e%CC%82_e%CC%82_%C2%AAe%CC%82_99_e%CC%82_e%CC%82_e%CC%82_e%CC%82_e%CC%82_e%CC%82__22_q835oq.jpg",
+          filename: "YelpCamp/ê_ê_ê_ê_ê_ª_ê_ê_ê_ê_ªê_99_ê_ê_ê_ê_ê_ê__22_q835oq",
         },
       ],
       description:
